@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make This Recipe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Intro Page */
+        .intro {
+            height: 100vh;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            transition: transform 0.8s ease;
+        }
+
+        .intro.hidden {
+            transform: translateY(-100%);
+        }
+
+        .intro-content {
+            text-align: center;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .intro h1 {
+            font-size: 4rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .intro button {
+            margin-top: 20px;
+            padding: 15px 30px;
+            border: none;
+            background: #fff;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+
+        .intro button:hover {
+            transform: scale(1.1);
+        }
+
+        /* Main Interface */
+        .main-container {
+            height: 100vh;
+            background: #f9f9f9;
+            display: none;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .main-container.active {
+            display: block;
+        }
+
+        /* Chat Container */
+        .chat-container {
+            width: 70%;
+            height: 80%;
+            margin: 50px auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            padding: 20px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: linear-gradient(to bottom, #fff, #f0f0f0);
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 15px;
+            max-width: 70%;
+            animation: slideIn 0.3s ease;
+        }
+
+        .user-message {
+            background: #4ecdc4;
+            color: white;
+            margin-left: auto;
+        }
+
+        .ai-message {
+            background: #ffe66d;
+            color: #333;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .chat-input {
+            padding: 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+            background: white;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .chat-input button {
+            padding: 15px 25px;
+            border: none;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .chat-input button:hover {
+            background: #e55a5a;
+        }
+
+        /* Feature Buttons */
+        .feature-buttons {
+            position: absolute;
+            right: 20px;
+            top: 80px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .feature-btn {
+            padding: 10px 20px;
+            border: none;
+            background: #4ecdc4;
+            color: white;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .feature-btn:hover {
+            transform: translateX(5px);
+        }
+
+        /* Donation Button */
+        .donate-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            padding: 12px 25px;
+            background: #ff9f1c;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .donate-btn:hover {
+            background: #e88f17;
+            transform: scale(1.1) rotate(5deg);
+        }
+    </style>
+</head>
+<body>
+    <!-- Intro Page -->
+    <div class="intro">
+        <div class="intro-content">
+            <h1>Make This Recipe</h1>
+            <button onclick="enterKitchen()">Tap to Enter Kitchen</button>
+        </div>
+    </div>
+
+    <!-- Main Chat Interface -->
+    <div class="main-container">
+        <div class="chat-container">
+            <div class="chat-header">
+                <h2>Recipe Buddy</h2>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message ai-message">Hello! Tell me what ingredients you have, and I'll whip up some delicious recipes for you!</div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="userInput" placeholder="Type your ingredients...">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+            <div class="feature-buttons">
+                <button class="feature-btn" onclick="clearChat()">Clear Chat</button>
+                <button class="feature-btn" onclick="suggestRandom()">Random Recipe</button>
+                <button class="feature-btn" onclick="showTips()">Cooking Tips</button>
+            </div>
+            <a href="https://buy.stripe.com/00g16Q5xv4Cw05G6oo" target="_blank">
+                <button class="donate-btn">Support with a Donation</button>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Enter Kitchen Animation
+        function enterKitchen() {
+            document.querySelector('.intro').classList.add('hidden');
+            setTimeout(() => {
+                document.querySelector('.main-container').classList.add('active');
+            }, 800);
+        }
+
+        // Chat Functionality
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            // Add user message
+            const chatMessages = document.getElementById('chatMessages');
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user-message';
+            userMsg.textContent = message;
+            chatMessages.appendChild(userMsg);
+
+            // Simulate AI response (replace with actual AI logic later)
+            setTimeout(() => {
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'message ai-message';
+                aiMsg.textContent = `Let me think... With ${message}, you could make a delicious dish! How about a quick recipe suggestion?`;
+                chatMessages.appendChild(aiMsg);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1000);
+
+            input.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Feature Functions
+        function clearChat() {
+            const chatMessages = document.getElementById('chatMessages');
+            chatMessages.innerHTML = '<div class="message ai-message">Chat cleared! What ingredients do you have now?</div>';
+        }
+
+        function suggestRandom() {
+            const chatMessages = document.getElementById('chatMessages');
+            const aiMsg = document.createElement('div');
+            aiMsg.className = 'message ai-message';
+            aiMsg.textContent = 'How about a random idea? Try making a Chicken Alfredo with pasta, cream, and parmesan!';
+            chatMessages.appendChild(aiMsg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTips() {
+            const chatMessages = document.getElementById('chatMessages');
+            const aiMsg = document.createElement('div');
+            aiMsg.className = 'message ai-message';
+            aiMsg.textContent = 'Cooking tip: Always salt your pasta water—it makes a huge difference!';
+            chatMessages.appendChild(aiMsg);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Enter on keypress
+        document.getElementById('userInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>
