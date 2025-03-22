@@ -84,7 +84,7 @@
             height: 100vh;
             background: #f5f7fa;
             display: none;
-            overflow: hidden;
+            overflow-y: auto;
             position: relative;
         }
 
@@ -94,17 +94,18 @@
 
         /* Chat Container */
         .chat-container {
-            width: 85%;
+            width: 90%;
             max-width: 800px;
-            height: 85%;
-            margin: 40px auto;
+            height: auto;
+            min-height: 80vh;
+            margin: 20px auto;
             background: #fff;
             border-radius: 30px;
             box-shadow: 0 15px 40px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
             position: relative;
-            overflow: hidden;
+            overflow: visible;
             border: 2px solid #e0e0e0;
         }
 
@@ -185,22 +186,28 @@
         }
 
         .chat-input {
-            padding: 20px;
+            padding: 15px;
             border-top: 1px solid #eee;
             display: flex;
-            gap: 15px;
+            gap: 10px;
             background: #fff;
             align-items: center;
+            flex-wrap: nowrap;
+            position: sticky;
+            bottom: 0;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .chat-input input {
             flex: 1;
-            padding: 15px 20px;
+            padding: 10px 15px;
             border: 2px solid #ddd;
             border-radius: 25px;
             font-size: 1rem;
             outline: none;
             transition: border 0.3s;
+            min-width: 0;
         }
 
         .chat-input input:focus {
@@ -208,13 +215,14 @@
         }
 
         .chat-input button {
-            padding: 15px 25px;
+            padding: 10px 20px;
             border: none;
             background: #ff6b6b;
             color: white;
             border-radius: 25px;
             cursor: pointer;
             transition: background 0.3s;
+            white-space: nowrap;
         }
 
         .chat-input button:hover {
@@ -223,7 +231,7 @@
 
         .voice-btn {
             background: #66a6ff;
-            padding: 15px;
+            padding: 10px;
             border-radius: 50%;
             color: white;
             cursor: pointer;
@@ -315,6 +323,65 @@
             40% { transform: translateY(-10px); }
             60% { transform: translateY(-5px); }
         }
+
+        /* Media Queries for Mobile */
+        @media (max-width: 600px) {
+            .intro h1 {
+                font-size: 2.5rem;
+            }
+
+            .intro button {
+                padding: 10px 30px;
+                font-size: 1rem;
+            }
+
+            .chat-container {
+                width: 95%;
+                margin: 10px auto;
+                min-height: 90vh;
+            }
+
+            .chat-header h2 {
+                font-size: 1.4rem;
+            }
+
+            .chat-messages {
+                padding: 15px;
+            }
+
+            .message {
+                max-width: 85%;
+                padding: 10px 15px;
+            }
+
+            .chat-input {
+                padding: 10px;
+                gap: 5px;
+            }
+
+            .chat-input input {
+                padding: 8px 10px;
+                font-size: 0.9rem;
+            }
+
+            .chat-input button {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+
+            .voice-btn {
+                padding: 8px;
+            }
+
+            .chat-footer {
+                padding: 10px;
+            }
+
+            .donate-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -360,6 +427,78 @@
     </div>
 
     <script>
+        // Hardcoded Recipe Database
+        const recipeDatabase = [
+            {
+                name: "Chicken Stir-Fry",
+                ingredients: ["chicken", "bell peppers", "soy sauce", "garlic", "onion"],
+                instructions: `
+                    **Chicken Stir-Fry Recipe** 🍗
+                    *Ingredients:*
+                    - 2 chicken breasts, sliced
+                    - 2 bell peppers, sliced
+                    - 1 onion, sliced
+                    - 2 cloves garlic, minced
+                    - 3 tbsp soy sauce
+                    - 1 tbsp olive oil
+                    - Salt and pepper to taste
+
+                    *Instructions:*
+                    1. Heat olive oil in a large pan over medium heat.
+                    2. Add garlic and onion, sauté until fragrant (about 2 minutes).
+                    3. Add chicken slices, season with salt and pepper, and cook until browned (about 5-7 minutes).
+                    4. Toss in bell peppers and stir-fry for another 3-4 minutes.
+                    5. Pour in soy sauce, stir well, and cook for an additional 2 minutes.
+                    6. Serve hot with rice or noodles. Enjoy! 🍚
+                `
+            },
+            {
+                name: "Tomato Pasta",
+                ingredients: ["pasta", "tomatoes", "garlic", "olive oil", "basil"],
+                instructions: `
+                    **Tomato Pasta Recipe** 🍝
+                    *Ingredients:*
+                    - 200g pasta
+                    - 3 fresh tomatoes, diced (or 1 can diced tomatoes)
+                    - 2 cloves garlic, minced
+                    - 2 tbsp olive oil
+                    - Fresh basil leaves, chopped
+                    - Salt and pepper to taste
+
+                    *Instructions:*
+                    1. Cook pasta in salted boiling water according to package instructions. Drain and set aside.
+                    2. In a pan, heat olive oil over medium heat. Add garlic and sauté for 1 minute.
+                    3. Add diced tomatoes, season with salt and pepper, and cook for 5-7 minutes until the tomatoes break down into a sauce.
+                    4. Toss the cooked pasta into the sauce, mix well, and cook for another 2 minutes.
+                    5. Garnish with fresh basil and serve. Buon appetito! 🌿
+                `
+            },
+            {
+                name: "Vegetable Omelette",
+                ingredients: ["eggs", "bell peppers", "onion", "cheese", "spinach"],
+                instructions: `
+                    **Vegetable Omelette Recipe** 🥚
+                    *Ingredients:*
+                    - 3 eggs
+                    - 1/2 bell pepper, diced
+                    - 1/4 onion, diced
+                    - Handful of spinach
+                    - 1/4 cup shredded cheese
+                    - Salt and pepper to taste
+                    - 1 tbsp olive oil
+
+                    *Instructions:*
+                    1. In a bowl, whisk the eggs with salt and pepper.
+                    2. Heat olive oil in a non-stick pan over medium heat.
+                    3. Add onion and bell pepper, sauté for 3-4 minutes until softened.
+                    4. Add spinach and cook for another 1 minute until wilted.
+                    5. Pour the whisked eggs into the pan, tilting to spread evenly.
+                    6. Sprinkle cheese on top and cook for 3-4 minutes until the eggs are set.
+                    7. Fold the omelette in half and serve hot. Enjoy! 🍳
+                `
+            }
+        ];
+
         // Enter Kitchen Animation
         function enterKitchen() {
             document.querySelector('.intro').classList.add('hidden');
@@ -380,7 +519,7 @@
         // Chat Functionality
         function sendMessage() {
             const input = document.getElementById('userInput');
-            const message = input.value.trim();
+            const message = input.value.trim().toLowerCase();
             if (!message) return;
 
             // Add user message
@@ -394,12 +533,33 @@
             const typingIndicator = document.getElementById('typingIndicator');
             typingIndicator.style.display = 'block';
 
-            // Simulate AI response
+            // Process ingredients and find a matching recipe
             setTimeout(() => {
                 typingIndicator.style.display = 'none';
                 const aiMsg = document.createElement('div');
                 aiMsg.className = 'message ai-message';
-                aiMsg.textContent = `Let me think... With ${message}, you could make a delicious dish! How about a quick recipe suggestion?`;
+
+                // Split user input into individual ingredients
+                const userIngredients = message.split(',').map(item => item.trim());
+
+                // Find a matching recipe
+                let matchedRecipe = null;
+                for (const recipe of recipeDatabase) {
+                    const matches = recipe.ingredients.filter(ingredient => 
+                        userIngredients.some(userIngredient => userIngredient.includes(ingredient))
+                    );
+                    if (matches.length >= 2) { // Require at least 2 matching ingredients
+                        matchedRecipe = recipe;
+                        break;
+                    }
+                }
+
+                if (matchedRecipe) {
+                    aiMsg.textContent = matchedRecipe.instructions;
+                } else {
+                    aiMsg.textContent = `Hmm, I couldn't find a recipe that matches your ingredients (${message}). Try listing some different ingredients, or I can suggest a random recipe for you! 🍴`;
+                }
+
                 chatMessages.appendChild(aiMsg);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }, 1500);
@@ -420,9 +580,10 @@
             typingIndicator.style.display = 'block';
             setTimeout(() => {
                 typingIndicator.style.display = 'none';
+                const randomRecipe = recipeDatabase[Math.floor(Math.random() * recipeDatabase.length)];
                 const aiMsg = document.createElement('div');
                 aiMsg.className = 'message ai-message';
-                aiMsg.textContent = 'How about a random idea? Try making a Chicken Alfredo with pasta, cream, and parmesan! 🍝';
+                aiMsg.textContent = randomRecipe.instructions;
                 chatMessages.appendChild(aiMsg);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }, 1500);
