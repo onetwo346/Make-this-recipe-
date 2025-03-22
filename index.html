@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Make This Recipe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -15,56 +16,73 @@
         /* Intro Page */
         .intro {
             height: 100vh;
-            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            background: linear-gradient(135deg, #ff9a8b, #66a6ff);
             display: flex;
             justify-content: center;
             align-items: center;
             position: fixed;
             width: 100%;
-            transition: transform 0.8s ease;
+            transition: transform 1s ease;
+            overflow: hidden;
         }
 
         .intro.hidden {
             transform: translateY(-100%);
         }
 
+        .intro::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/food.png');
+            opacity: 0.1;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { background-position: 0 0; }
+            100% { background-position: 1000px 1000px; }
+        }
+
         .intro-content {
             text-align: center;
             color: white;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            z-index: 1;
         }
 
         .intro h1 {
-            font-size: 4rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-size: 4.5rem;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            animation: fadeIn 1.5s ease-in-out;
         }
 
         .intro button {
-            margin-top: 20px;
-            padding: 15px 30px;
+            margin-top: 30px;
+            padding: 15px 40px;
             border: none;
             background: #fff;
-            border-radius: 25px;
-            font-size: 1.2rem;
+            border-radius: 50px;
+            font-size: 1.3rem;
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            transition: transform 0.3s;
+            transition: all 0.3s ease;
         }
 
         .intro button:hover {
-            transform: scale(1.1);
+            transform: scale(1.1) rotate(2deg);
+            background: #f0f0f0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Main Interface */
         .main-container {
             height: 100vh;
-            background: #f9f9f9;
+            background: #f5f7fa;
             display: none;
             overflow: hidden;
             position: relative;
@@ -76,52 +94,72 @@
 
         /* Chat Container */
         .chat-container {
-            width: 70%;
-            height: 80%;
-            margin: 50px auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 85%;
+            max-width: 800px;
+            height: 85%;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 30px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
             position: relative;
             overflow: hidden;
+            border: 2px solid #e0e0e0;
         }
 
         .chat-header {
             padding: 20px;
-            background: #ff6b6b;
+            background: linear-gradient(90deg, #ff6b6b, #ff8e53);
             color: white;
-            border-radius: 20px 20px 0 0;
+            border-radius: 30px 30px 0 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
+        .chat-header h2 {
+            font-size: 1.8rem;
+        }
+
         .chat-messages {
             flex: 1;
-            padding: 20px;
+            padding: 25px;
             overflow-y: auto;
-            background: linear-gradient(to bottom, #fff, #f0f0f0);
+            background: #fafafa;
         }
 
         .message {
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 15px;
-            max-width: 70%;
-            animation: slideIn 0.3s ease;
+            margin: 15px 0;
+            padding: 15px 20px;
+            border-radius: 20px;
+            max-width: 75%;
+            position: relative;
+            animation: slideIn 0.5s ease;
         }
 
         .user-message {
-            background: #4ecdc4;
+            background: linear-gradient(135deg, #66a6ff, #89f7fe);
             color: white;
             margin-left: auto;
+            border-bottom-right-radius: 5px;
         }
 
         .ai-message {
-            background: #ffe66d;
+            background: linear-gradient(135deg, #ffe66d, #ffeb99);
             color: #333;
+            border-bottom-left-radius: 5px;
+        }
+
+        .ai-message::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: url('https://img.icons8.com/emoji/48/000000/chef-kiss-emoji.png') no-repeat center;
+            background-size: contain;
         }
 
         @keyframes slideIn {
@@ -129,21 +167,44 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
+        .typing-indicator {
+            display: none;
+            padding: 10px;
+            color: #999;
+        }
+
+        .typing-indicator span {
+            animation: blink 1s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
         .chat-input {
             padding: 20px;
             border-top: 1px solid #eee;
             display: flex;
-            gap: 10px;
-            background: white;
+            gap: 15px;
+            background: #fff;
+            align-items: center;
         }
 
         .chat-input input {
             flex: 1;
-            padding: 15px;
+            padding: 15px 20px;
             border: 2px solid #ddd;
             border-radius: 25px;
             font-size: 1rem;
             outline: none;
+            transition: border 0.3s;
+        }
+
+        .chat-input input:focus {
+            border-color: #ff6b6b;
         }
 
         .chat-input button {
@@ -160,28 +221,64 @@
             background: #e55a5a;
         }
 
-        /* Feature Buttons */
-        .feature-buttons {
+        .voice-btn {
+            background: #66a6ff;
+            padding: 15px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .voice-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Sidebar for Features */
+        .sidebar {
             position: absolute;
             right: 20px;
             top: 80px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(100%);
+        }
+
+        .sidebar-toggle {
+            position: absolute;
+            right: 100%;
+            top: 10px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
         }
 
         .feature-btn {
-            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
             border: none;
-            background: #4ecdc4;
-            color: white;
-            border-radius: 15px;
+            background: none;
+            color: #333;
+            border-radius: 10px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: background 0.3s;
+            width: 100%;
+            text-align: left;
         }
 
         .feature-btn:hover {
-            transform: translateX(5px);
+            background: #f0f0f0;
         }
 
         /* Donation Button */
@@ -198,11 +295,21 @@
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: bounce 2s infinite;
         }
 
         .donate-btn:hover {
             background: #e88f17;
-            transform: scale(1.1) rotate(5deg);
+            transform: scale(1.1);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
         }
     </style>
 </head>
@@ -222,19 +329,26 @@
                 <h2>Recipe Buddy</h2>
             </div>
             <div class="chat-messages" id="chatMessages">
-                <div class="message ai-message">Hello! Tell me what ingredients you have, and I'll whip up some delicious recipes for you!</div>
+                <div class="message ai-message">Hello! Tell me what ingredients you have, and I'll whip up some delicious recipes for you! 🍳</div>
+            </div>
+            <div class="typing-indicator" id="typingIndicator">
+                Recipe Buddy is typing<span>.</span><span>.</span><span>.</span>
             </div>
             <div class="chat-input">
+                <button class="voice-btn" onclick="startVoiceInput()"><i class="fas fa-microphone"></i></button>
                 <input type="text" id="userInput" placeholder="Type your ingredients...">
                 <button onclick="sendMessage()">Send</button>
             </div>
-            <div class="feature-buttons">
-                <button class="feature-btn" onclick="clearChat()">Clear Chat</button>
-                <button class="feature-btn" onclick="suggestRandom()">Random Recipe</button>
-                <button class="feature-btn" onclick="showTips()">Cooking Tips</button>
+            <div class="sidebar" id="sidebar">
+                <button class="sidebar-toggle" onclick="toggleSidebar()"><i class="fas fa-chevron-left"></i></button>
+                <button class="feature-btn" onclick="clearChat()"><i class="fas fa-trash"></i> Clear Chat</button>
+                <button class="feature-btn" onclick="suggestRandom()"><i class="fas fa-dice"></i> Random Recipe</button>
+                <button class="feature-btn" onclick="showTips()"><i class="fas fa-lightbulb"></i> Cooking Tips</button>
+                <button class="feature-btn" onclick="saveRecipe()"><i class="fas fa-save"></i> Save Recipe</button>
+                <button class="feature-btn" onclick="shareRecipe()"><i class="fas fa-share"></i> Share Recipe</button>
             </div>
             <a href="https://buy.stripe.com/00g16Q5xv4Cw05G6oo" target="_blank">
-                <button class="donate-btn">Support with a Donation</button>
+                <button class="donate-btn"><i class="fas fa-heart"></i> Support with a Donation</button>
             </a>
         </div>
     </div>
@@ -245,7 +359,16 @@
             document.querySelector('.intro').classList.add('hidden');
             setTimeout(() => {
                 document.querySelector('.main-container').classList.add('active');
-            }, 800);
+            }, 1000);
+        }
+
+        // Sidebar Toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('collapsed');
+            const toggleBtn = sidebar.querySelector('.sidebar-toggle i');
+            toggleBtn.classList.toggle('fa-chevron-left');
+            toggleBtn.classList.toggle('fa-chevron-right');
         }
 
         // Chat Functionality
@@ -261,14 +384,19 @@
             userMsg.textContent = message;
             chatMessages.appendChild(userMsg);
 
-            // Simulate AI response (replace with actual AI logic later)
+            // Show typing indicator
+            const typingIndicator = document.getElementById('typingIndicator');
+            typingIndicator.style.display = 'block';
+
+            // Simulate AI response
             setTimeout(() => {
+                typingIndicator.style.display = 'none';
                 const aiMsg = document.createElement('div');
                 aiMsg.className = 'message ai-message';
                 aiMsg.textContent = `Let me think... With ${message}, you could make a delicious dish! How about a quick recipe suggestion?`;
                 chatMessages.appendChild(aiMsg);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, 1000);
+            }, 1500);
 
             input.value = '';
             chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -277,25 +405,85 @@
         // Feature Functions
         function clearChat() {
             const chatMessages = document.getElementById('chatMessages');
-            chatMessages.innerHTML = '<div class="message ai-message">Chat cleared! What ingredients do you have now?</div>';
+            chatMessages.innerHTML = '<div class="message ai-message">Chat cleared! What ingredients do you have now? 🍳</div>';
         }
 
         function suggestRandom() {
             const chatMessages = document.getElementById('chatMessages');
-            const aiMsg = document.createElement('div');
-            aiMsg.className = 'message ai-message';
-            aiMsg.textContent = 'How about a random idea? Try making a Chicken Alfredo with pasta, cream, and parmesan!';
-            chatMessages.appendChild(aiMsg);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            const typingIndicator = document.getElementById('typingIndicator');
+            typingIndicator.style.display = 'block';
+            setTimeout(() => {
+                typingIndicator.style.display = 'none';
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'message ai-message';
+                aiMsg.textContent = 'How about a random idea? Try making a Chicken Alfredo with pasta, cream, and parmesan! 🍝';
+                chatMessages.appendChild(aiMsg);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1500);
         }
 
         function showTips() {
             const chatMessages = document.getElementById('chatMessages');
+            const typingIndicator = document.getElementById('typingIndicator');
+            typingIndicator.style.display = 'block';
+            setTimeout(() => {
+                typingIndicator.style.display = 'none';
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'message ai-message';
+                aiMsg.textContent = 'Cooking tip: Always salt your pasta water—it makes a huge difference! 🧂';
+                chatMessages.appendChild(aiMsg);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1500);
+        }
+
+        function saveRecipe() {
+            const chatMessages = document.getElementById('chatMessages');
+            const lastMessage = chatMessages.lastChild.textContent;
+            localStorage.setItem('savedRecipe', lastMessage);
             const aiMsg = document.createElement('div');
             aiMsg.className = 'message ai-message';
-            aiMsg.textContent = 'Cooking tip: Always salt your pasta water—it makes a huge difference!';
+            aiMsg.textContent = 'Recipe saved! You can find it in your browser’s local storage. 📝';
             chatMessages.appendChild(aiMsg);
             chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function shareRecipe() {
+            const chatMessages = document.getElementById('chatMessages');
+            const lastMessage = chatMessages.lastChild.textContent;
+            const shareData = {
+                title: 'Check out this recipe!',
+                text: lastMessage,
+                url: window.location.href
+            };
+            if (navigator.share) {
+                navigator.share(shareData).then(() => {
+                    const aiMsg = document.createElement('div');
+                    aiMsg.className = 'message ai-message';
+                    aiMsg.textContent = 'Recipe shared! 🍴';
+                    chatMessages.appendChild(aiMsg);
+                });
+            } else {
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'message ai-message';
+                aiMsg.textContent = 'Sharing not supported on this device. Try copying the recipe! 📋';
+                chatMessages.appendChild(aiMsg);
+            }
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Voice Input
+        function startVoiceInput() {
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+            recognition.start();
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('userInput').value = transcript;
+                sendMessage();
+            };
+            recognition.onerror = () => {
+                alert('Voice input failed. Please try again or type your ingredients.');
+            };
         }
 
         // Enter on keypress
