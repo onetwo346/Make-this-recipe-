@@ -281,11 +281,15 @@
             background: #f0f0f0;
         }
 
-        /* Donation Button */
+        /* Footer for Donation Button */
+        .chat-footer {
+            padding: 15px;
+            background: #fff;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+
         .donate-btn {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
             padding: 12px 25px;
             background: #ff9f1c;
             color: white;
@@ -295,7 +299,7 @@
             cursor: pointer;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             transition: all 0.3s ease;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 10px;
             animation: bounce 2s infinite;
@@ -339,6 +343,11 @@
                 <input type="text" id="userInput" placeholder="Type your ingredients...">
                 <button onclick="sendMessage()">Send</button>
             </div>
+            <div class="chat-footer">
+                <a href="https://buy.stripe.com/00g16Q5xv4Cw05G6oo" target="_blank">
+                    <button class="donate-btn"><i class="fas fa-heart"></i> Support with a Donation</button>
+                </a>
+            </div>
             <div class="sidebar" id="sidebar">
                 <button class="sidebar-toggle" onclick="toggleSidebar()"><i class="fas fa-chevron-left"></i></button>
                 <button class="feature-btn" onclick="clearChat()"><i class="fas fa-trash"></i> Clear Chat</button>
@@ -347,9 +356,6 @@
                 <button class="feature-btn" onclick="saveRecipe()"><i class="fas fa-save"></i> Save Recipe</button>
                 <button class="feature-btn" onclick="shareRecipe()"><i class="fas fa-share"></i> Share Recipe</button>
             </div>
-            <a href="https://buy.stripe.com/00g16Q5xv4Cw05G6oo" target="_blank">
-                <button class="donate-btn"><i class="fas fa-heart"></i> Support with a Donation</button>
-            </a>
         </div>
     </div>
 
